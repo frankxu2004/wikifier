@@ -12,6 +12,6 @@
 hs_err_pid*
 
 /data
-.iml
+*.iml
 /.idea
 /dist
