@@ -108,32 +108,32 @@ public class LinkingProblem implements Serializable,Closeable {
             corefView.start();
         if(GlobalParameters.params.USE_RELATIONAL_INFERENCE)
             mentionView.start();
-        System.out.println("Constructing a problem for the following text: \n" + StringUtils.abbreviate(text, 200));
+//        System.out.println("Constructing a problem for the following text: \n" + StringUtils.abbreviate(text, 200));
         long firstTime = System.currentTimeMillis();
         long afterTFIDFTime = firstTime;
         
         if (GlobalParameters.params.useLexicalFeaturesNaive || GlobalParameters.params.useLexicalFeaturesReweighted) {
             this.textVec = GlobalParameters.wikiAccess.getWikiSummaryData().getTextRepresentation(text, true);
-            System.out.println(System.currentTimeMillis() - firstTime
-                    + " milliseconds elapsed on constructing the TF-IDF representation of the input text..." + sourceFilename);
+//            System.out.println(System.currentTimeMillis() - firstTime
+//                    + " milliseconds elapsed on constructing the TF-IDF representation of the input text..." + sourceFilename);
             afterTFIDFTime = System.currentTimeMillis();
         }
-        System.out.println("Getting the wikifiable mentions candidates");
+//        System.out.println("Getting the wikifiable mentions candidates");
         
         components = MentionExtractor.extract(this, referenceInstances, GlobalParameters.wikiAccess);
         Collections.sort(components,Comparators.earlierEntityFirst);
         // Locking list to prevent tampering
         components = Collections.unmodifiableList(components);
 
-        System.out.println("     ----  almost there....");
+//        System.out.println("     ----  almost there....");
         if (referenceInstances != null) {
             GoldAnnotation gold = new GoldAnnotation(referenceInstances);
             for (Mention e : components) {
                 e.goldCandidate = gold.getGoldDisambiguationCandidate(e, true);
             }
         }
-        System.out.println(System.currentTimeMillis() - afterTFIDFTime
-                + " milliseconds elapsed on constructing potentially wikifiable entitites in the input text..." + sourceFilename);
+//        System.out.println(System.currentTimeMillis() - afterTFIDFTime
+//                + " milliseconds elapsed on constructing potentially wikifiable entitites in the input text..." + sourceFilename);
         timeConsumedConstructingProblems += (System.currentTimeMillis() - firstTime);
     }
 
@@ -183,6 +183,49 @@ public class LinkingProblem implements Serializable,Closeable {
             e.constituent = c;
             entityView.addConstituent(c);
         }
+    }
+
+    public String simpleWikificationString(HashSet<String> knownEntities) throws Exception{
+        StringBuilder res = new StringBuilder();
+        int lastEnd = 0;
+        List<Mention> costarts = Lists.newArrayList();
+        for (Mention m : components) {
+
+            if (m.topCandidate == null || m.getLinkability()<0.01)
+                continue;
+
+            if (costarts.size() == 0 || costarts.get(0).startTokenId == m.startTokenId) {
+                costarts.add(m);
+                continue;
+            }
+
+            // Dequeue and enqueue
+            costarts.sort(Comparators.longerEntityFirst);
+
+            for(Mention e:costarts)
+                if (e.topCandidate != null && (e.charStart > lastEnd || lastEnd == 0)) {
+
+                    String title = e.topCandidate.titleName;
+                    String testEntity = e.surfaceForm.toLowerCase().replace(' ', '_') + '\t' + title.toLowerCase();
+                    res.append(text.substring(lastEnd, e.charStart));
+                    if(!knownEntities.contains(testEntity) || e.getLinkability()<0.05 || WordFeatures.containsNoUpperCase(e.surfaceForm))
+                        res.append(e.surfaceForm);
+                    else
+                        res.append("@@@")
+                                .append(e.surfaceForm)
+                                .append("@@@")
+                                .append(title)
+                                .append("@@@");
+
+                    lastEnd = e.charStart + e.charLength;
+                    break;
+                }
+            costarts.clear();
+            costarts.add(m);
+        }
+        res.append(text.substring(lastEnd));
+        return res.toString();
+
     }
 
     public String wikificationString(boolean displayErrors) throws Exception {
@@ -256,7 +299,6 @@ public class LinkingProblem implements Serializable,Closeable {
     /**
      * Generates a filtered and ordered entity list for further analysis
      * 
-     * @param components
      * @return sorted entities
      */
     public List<Mention> getSortedMentions() {
@@ -289,7 +331,7 @@ public class LinkingProblem implements Serializable,Closeable {
                 RelationSolver solver = new RelationSolver(this, SolverType.GUROBI);
                 long start = System.currentTimeMillis();
                 solver.solve();
-                System.out.println("Relational inference took " + (System.currentTimeMillis() - start) + "ms");
+//                System.out.println("Relational inference took " + (System.currentTimeMillis() - start) + "ms");
                 solver.explain();
 
             } catch (Exception e) {
@@ -308,8 +350,6 @@ public class LinkingProblem implements Serializable,Closeable {
     /**
      * Generates new candidates and appending resolved relations to the problem
      * 
-     * @param relational
-     *            window size
      * @return
      * @throws Exception
      */

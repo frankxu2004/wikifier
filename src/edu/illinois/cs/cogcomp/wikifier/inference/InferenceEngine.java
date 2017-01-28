@@ -133,7 +133,7 @@ public class InferenceEngine {
 			problem.resolveOverlapConflicts();
 		}
 		
-		System.out.println("Annotation at test time--"+ (System.currentTimeMillis()-lastTime)+" milliseconds elapsed to annotate the document "+ problem.sourceFilename);
+//		System.out.println("Annotation at test time--"+ (System.currentTimeMillis()-lastTime)+" milliseconds elapsed to annotate the document "+ problem.sourceFilename);
 
 		problem.close();
 		return res;
@@ -153,7 +153,7 @@ public class InferenceEngine {
 		long lastTime =  System.currentTimeMillis();
 		for(Mention e:problem.components)
 			rankCandidates(e, ranker);
-		System.out.println( System.currentTimeMillis()-lastTime+" milliseconds elapsed ranking the candidates at level..."+ranker.extractorName);
+//		System.out.println( System.currentTimeMillis()-lastTime+" milliseconds elapsed ranking the candidates at level..."+ranker.extractorName);
 		timeConsumedOnRanking += (System.currentTimeMillis()-firstTime);
 	}
 	

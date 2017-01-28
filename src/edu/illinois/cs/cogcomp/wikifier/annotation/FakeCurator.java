@@ -158,7 +158,7 @@ class FakeCurator {
 		        exe.awaitTermination(4000, TimeUnit.MINUTES);
 		        coref.interrupt();
 		    }catch(InterruptedException e){
-		        System.out.println("Coreference takig too long, interrupted!!!");
+		        System.out.println("Coreference taking too long, interrupted!!!");
 		        e.printStackTrace();
 		    }
 		}

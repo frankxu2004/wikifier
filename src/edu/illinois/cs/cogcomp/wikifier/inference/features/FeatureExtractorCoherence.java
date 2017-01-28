@@ -69,7 +69,7 @@ public class FeatureExtractorCoherence extends FeatureExtractorInterface{
 		//for(int componentId=0;componentId<problem.components.size(); componentId++)
 		//	extractFeatures(problem, componentId);
 		featureExtractionTime += System.currentTimeMillis()-lastTime;
-		System.out.println(System.currentTimeMillis()-lastTime+" milliseconds elapsed extracting features for the level: "+extractorName);
+//		System.out.println(System.currentTimeMillis()-lastTime+" milliseconds elapsed extracting features for the level: "+extractorName);
 	}
 		
 	protected void extractFeatures(LinkingProblem problem,int componentToResolve) throws Exception{

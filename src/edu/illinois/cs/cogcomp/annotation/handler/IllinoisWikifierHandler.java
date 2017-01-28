@@ -148,17 +148,17 @@ public class IllinoisWikifierHandler extends IllinoisAbstractHandler implements 
     public Labeling tagText(TextAnnotation ta) throws Exception {
 
         String text = ta.getText();
-        System.out.println("IllinoisWikifierHandler.tagText()...\n----------Input text: " + text);
+        //System.out.println("IllinoisWikifierHandler.tagText()...\n----------Input text: " + text);
 
         Labeling labeling = new Labeling();
         List<Span> labels = new ArrayList<Span>();
         Map<String, Span> knownSpans = new HashMap<String, Span>();
 
-        System.err.println("## IllinoisWikifierHandler.tagText(): instantiating LinkingProblem... ");
+//        System.err.println("## IllinoisWikifierHandler.tagText(): instantiating LinkingProblem... ");
         LinkingProblem prob = new LinkingProblem("serverinput", ta, null);
-        System.err.println("## IllinoisWikifierHandler.tagText(): calling inference engine... ");
+//        System.err.println("## IllinoisWikifierHandler.tagText(): calling inference engine... ");
         inference.annotate(prob, null, false, false, 0);
-        System.err.println("## IllinoisWikifierHandler.tagText(): done with calling inference engine... ");
+//        System.err.println("## IllinoisWikifierHandler.tagText(): done with calling inference engine... ");
 
         /*
          * This takes care of the Wikifier output. However, notice that I'll be assigning some

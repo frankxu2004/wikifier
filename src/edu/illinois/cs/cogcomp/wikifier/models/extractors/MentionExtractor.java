@@ -109,11 +109,6 @@ public class MentionExtractor {
         }
     };
 
-    /**
-     * 
-     * @param ta
-     * @return
-     */
     private static Map<String, Mention> generateEntitiesFromAnnotation(LinkingProblem problem) {
 
         TextAnnotation ta = problem.ta;
@@ -121,16 +116,16 @@ public class MentionExtractor {
         
         Map<String, Mention> wikifiableEntititesMap = Maps.newHashMap();
         // adding the potential wikifiable entities from the noun-phrase shallow parse and the NEs
-        System.out.println("Getting the text annotation");
+//        System.out.println("Getting the text annotation");
         // adding the NER chunks
-        System.out.println("Adding NER candidates for " + sourceFilename);
+//        System.out.println("Adding NER candidates for " + sourceFilename);
         nerGenerator.generate(problem, wikifiableEntititesMap, getNERConsituents(ta));
 
         // adding the shallow parse NP chunks
-        System.out.println("Adding SHALLOW_PARSE and subChunk candidates for " + sourceFilename);
+//        System.out.println("Adding SHALLOW_PARSE and subChunk candidates for " + sourceFilename);
         chunkGenerator.generate(problem, wikifiableEntititesMap, ta.getView(ViewNames.SHALLOW_PARSE));
 
-        System.out.println("Done - Getting the text annotation");
+//        System.out.println("Done - Getting the text annotation");
 
         return wikifiableEntititesMap;
     }
@@ -163,7 +158,6 @@ public class MentionExtractor {
      * Merges annotation based entities and manually defined entities as well as generating some
      * super entities that adjuncts adjacent "Top Level" entities
      * 
-     * @param ta
      * @return merged entities
      */
     private static Set<Mention> consolidateEntities(
@@ -175,7 +169,7 @@ public class MentionExtractor {
         if (manuallyDefinedEntititesList == null)
             return manuallyDefinedEntititesMap;
 
-        System.out.println("Adding manually specified mentions");
+//        System.out.println("Adding manually specified mentions");
         for(ReferenceInstance instance :manuallyDefinedEntititesList){
             
             int start = instance.charStart;
@@ -239,7 +233,7 @@ public class MentionExtractor {
         String text = problem.text;
         Matcher matcher = superEntityPattern.matcher(text);
         
-        System.out.println("Regex matching...");
+//        System.out.println("Regex matching...");
         Mention prev = null;
         while (matcher.find()) {
             // look ahead match is group 1
@@ -269,7 +263,7 @@ public class MentionExtractor {
                     continue;
                 }
             }
-            System.out.println("Matched regex entity " + e);
+//            System.out.println("Matched regex entity " + e);
             if (prev != null && prev.surfaceForm.startsWith("The ") && prev.surfaceForm.contains(surface) && prev.isNamedEntity()) {
                 if (!e.isNamedEntity()) {
                     e.types.addAll(prev.types);
@@ -281,7 +275,7 @@ public class MentionExtractor {
 //            matcher.region(ta.getTokenCharacterOffset(e.startTokenId+1).getSecond(), text.length());
             
         }
-        System.out.println("Finished adding regex large chunk matching");
+//        System.out.println("Finished adding regex large chunk matching");
     }
     
     private static boolean sameSentence(TextAnnotation ta,int id1,int id2){
@@ -302,7 +296,7 @@ public class MentionExtractor {
 
         TextAnnotation ta = problem.ta;
         String text = ta.getText();
-        System.out.println("Getting the Wikifiable entitites");
+//        System.out.println("Getting the Wikifiable entitites");
         // TokenIdToCharOffsetMapper textMapper = new TokenIdToCharOffsetMapper(text);
         // both of the maps are keyed by "<start-position-in-text>-<end-position-in-text>"
         Map<String, Mention> candidateEntities = generateEntitiesFromAnnotation(problem);
@@ -327,7 +321,7 @@ public class MentionExtractor {
 
         // OK, now return only those WikifiableEntities which contain disambiguation candidates
         // also, don't forget to initialize the context string and its TF-IDF representation
-        System.out.println("Extracting the candidate disambiguations for the mentions");
+//        System.out.println("Extracting the candidate disambiguations for the mentions");
         List<Mention> res = new ArrayList<Mention>();
 
         // Collect match data for entities
@@ -376,7 +370,7 @@ public class MentionExtractor {
             printProgress(res);
         }
 
-        System.out.println("Done constructing the Wikifiable entities");
+//        System.out.println("Done constructing the Wikifiable entities");
         expandNER(res);
         return res;
     } // function

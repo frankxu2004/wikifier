@@ -42,7 +42,7 @@ public class Coreference {
     }
 
     private Coreference() {
-        System.out.println("Creating coreferencer by thread "+Thread.currentThread().getId());
+        //System.out.println("Creating coreferencer by thread "+Thread.currentThread().getId());
         corefClassifier = new aceCorefSPLearner();
         corefClassifier.setThreshold(COREF_THRESHOLD);
 
@@ -69,7 +69,7 @@ public class Coreference {
     public static View getMentionView(String text){
 
         try{
-            System.out.println("Annotating mention view..");
+            //System.out.println("Annotating mention view..");
             instance.initialize();
             DocPlainText doc = (DocPlainText) instance.loader.loadDoc(text);
             View ret = doc.getTextAnnotation().getView(Constants.PRED_MENTION_VIEW);

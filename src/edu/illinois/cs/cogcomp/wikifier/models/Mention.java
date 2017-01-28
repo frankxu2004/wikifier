@@ -549,9 +549,8 @@ public class Mention extends TextSpan implements Serializable,Closeable {
         SurfaceFormSummaryProto surfaceFormData;
         try {
             surfaceFormData = GlobalParameters.wikiAccess.getSurfaceFormInfo(surfaceForm);
-            double linkability = ((double)surfaceFormData.getLinkedAppearanceCount())
+			return ((double)surfaceFormData.getLinkedAppearanceCount())
                     /surfaceFormData.getTotalAppearanceCount();
-            return linkability;
         } catch (Exception e) {
         }
         return 1;

@@ -37,7 +37,7 @@ public class FeatureExtractorLexical extends FeatureExtractorInterface{
 		execSvc.shutdown();
 		execSvc.awaitTermination(300,TimeUnit.SECONDS);
 		featureExtractionTime += System.currentTimeMillis()-lastTime;
-		System.out.println( System.currentTimeMillis()-lastTime+" milliseconds elapsed extracting features for the level: "+extractorName);
+//		System.out.println( System.currentTimeMillis()-lastTime+" milliseconds elapsed extracting features for the level: "+extractorName);
 	}
 	
 	protected void extractFeatures(LinkingProblem problem,int componentId) throws Exception{

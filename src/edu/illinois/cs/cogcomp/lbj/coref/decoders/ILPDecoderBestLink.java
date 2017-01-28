@@ -135,7 +135,7 @@ public class ILPDecoderBestLink
     //Pairwise Best link ordering:
     //Set<Mention> prosUsed = new HashSet<Mention>();
     for (int j = 1; j < allMents.size(); ++j) {
-        System.out.println(j+" out of "+allMents.size());
+        //System.out.println(j+" out of "+allMents.size());
         Mention m = allMents.get(j);
         boolean mIsPro = m.getType().equals("PRO");
         int [] indexJ = new int[j];
